@@ -12,8 +12,8 @@ public class IA {
 
 	public IA () {
 		this.reseau = new Reseau(1024);
-		this.reseau.addCouche(32);
-		this.reseau.addCouche(10);
+		this.reseau.addCouche(64);
+		this.reseau.addCouche(26);
 	}
 
 	public double[] charger_image(String chemin) {
@@ -45,17 +45,18 @@ public class IA {
 	
 	public void charger_donnees(String chemin, ArrayList<double[]> entrees, ArrayList<double[]> sorties) {
 
-		for(int chiffre = 0; chiffre < 10; chiffre++) {
-			File file = new File(chemin + "/" + chiffre);
+		for(char lettre = 'A'; lettre <= 'Z'; lettre++) {
+			File file = new File(chemin + "/" + lettre);
 			String[] contenu = file.list();
 			
 			if (contenu != null) {
 				for(String nom : contenu) {
-					double entree[] = charger_image(chemin + "/"  + chiffre + "/" + nom);
+					double entree[] = charger_image(chemin + "/"  + lettre + "/" + nom);
 
 					if(entree != null) {
-						double sortie[] = {0,0,0,0,0,0,0,0,0,0};
-						sortie[chiffre] = 1;
+						double sortie[] = new double[26];
+						Arrays.fill(sortie, 0);
+						sortie[lettre - 65] = 1;
 						entrees.add(entree);
 						sorties.add(sortie);
 					}
@@ -70,12 +71,12 @@ public class IA {
 		System.out.println("Chargement des données");
 		ArrayList<double[]> entrees_app = new ArrayList<double[]>();
 		ArrayList<double[]> sorties_app = new ArrayList<double[]>();
-		charger_donnees(chemin + "/train", entrees_app, sorties_app);
+		charger_donnees(chemin + "/Train", entrees_app, sorties_app);
 		
 		// Charger les données pour la validation
 		ArrayList<double[]> entrees_valid = new ArrayList<double[]>();
 		ArrayList<double[]> sorties_valid = new ArrayList<double[]>();
-		charger_donnees(chemin + "/valid", entrees_valid, sorties_valid);
+		charger_donnees(chemin + "/Validation", entrees_valid, sorties_valid);
 		
 		// Faire apprendre les données
 		System.out.println("Debut apprentissage");
@@ -100,7 +101,7 @@ public class IA {
 		
 		// Afficher sortie
 		for (int i = 0; i < sortie.length; i++) {
-			System.out.printf("%d : %1.5f%n", i, sortie[i]);
+			System.out.printf("%c : %1.2f%n", (char) (i+65), sortie[i]);
 		}
 	}
 
@@ -116,12 +117,12 @@ public class IA {
 				if (rep.equals("1")) {
 					System.out.println("Seuil ?");
 					double seuil = sc.nextDouble();
-					System.out.println("Chemin des données d'apprentissage et de validation ?");
+					System.out.println("Chemin des données ?");
 					String chemin = sc.next();
 					ia.apprendre(chemin, seuil, 0.01);
 				}
 				else if (rep.equals("2")) {
-					System.out.println("Chemin ?");
+					System.out.println("Chemin de l'image ?");
 					String chemin = sc.next();
 					ia.tester(chemin);
 				}

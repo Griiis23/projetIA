@@ -33,9 +33,12 @@ public class Reseau {
 
 
 	public void apprentissage(ArrayList<double[]> entrees, ArrayList<double[]> sorties, double taux) {
-		
+		// Pour chaque exemple d'apprentissage
 		for (int count = 0; count < entrees.size(); count++) {
+			
+			// On choisis un exemple au hasard
 			int ex = (int) (Math.random() * entrees.size());
+			
 			// On calcule la sortie
 			double sortie_obtenue[] = prediction(entrees.get(ex));
 
