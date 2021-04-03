@@ -161,6 +161,6 @@ public class IA {
 			catch (Exception e) {
 				System.err.println(e);
 			}
-		} while (!rep.equals("4"));
+		} while (!rep.equals("3"));
 	}
 }
