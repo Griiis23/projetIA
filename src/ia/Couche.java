@@ -21,6 +21,12 @@ class Couche {
 		}
 	}
 
+	/**
+	 * Calcule la sortie de la couche
+	 * 
+	 * @param entree	Entree de la couche
+	 * @return Sortie de la couche
+	 */
 	public double[] propager(double entree[]) {
 		this.entree = entree;
 
@@ -33,6 +39,15 @@ class Couche {
 		return sortie;
 	}
 
+	/**
+	 * Calcule l'erreur de la couche à partir de la couche suivante.
+	 * Met à jour les poids
+	 * 
+	 * @param erreur_couche_suiv	Erreur de la couche suivante
+	 * @param couche_suiv			Référence de la couche suivant
+	 * @param taux					Taux d'apprentissage
+	 * @return Erreur la couche
+	 */
 	public double[] retropropager(double erreur_couche_suiv[], Couche couche_suiv, double taux) {
 		double erreur[] = new double[taille_neurones];
 		// On calcule l'erreur pour chaque neuronne de cette chouche

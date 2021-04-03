@@ -22,6 +22,12 @@ public class Reseau {
 		couches.add(new Couche(taille_entree, nombre_neurones));
 	}
 
+	/**
+	 * Retourne la sortie du réseau pour une entrée donnée
+	 * 
+	 * @param entree	Entrée du réseau
+	 * @return	Sortie du réseau
+	 */
 	public double[] prediction(double entree[]) {
 		double donnee[] = entree;
 
@@ -31,23 +37,29 @@ public class Reseau {
 		return donnee;
 	}
 
-
-	public void apprentissage(ArrayList<double[]> entrees, ArrayList<double[]> sorties, double taux) {
+	/**
+	 * Algorithme de rétropropagation du gradient
+	 * 
+	 * @param entrees_app	Liste des entrées des exemples d'apprentissage
+	 * @param sorties_app	Liste des sorties des exemples d'apprentissage
+	 * @param taux			Taux d'apprentissage
+	 */
+	public void retropropagation(ArrayList<double[]> entrees_app, ArrayList<double[]> sorties_app, double taux) {
 		// Pour chaque exemple d'apprentissage
-		for (int count = 0; count < entrees.size(); count++) {
+		for (int count = 0; count < entrees_app.size(); count++) {
 			
 			// On choisis un exemple au hasard
-			int ex = (int) (Math.random() * entrees.size());
+			int ex = (int) (Math.random() * entrees_app.size());
 			
 			// On calcule la sortie
-			double sortie_obtenue[] = prediction(entrees.get(ex));
+			double sortie_obtenue[] = prediction(entrees_app.get(ex));
 
 			// On calcule l'erreur de la derniere couche
 			Couche derniere = couches.get(couches.size() - 1);
 			double erreur[] = new double[derniere.taille_neurones];
 
 			for (int j = 0; j < derniere.taille_neurones; j++ ) {
-				erreur[j] = (sorties.get(ex)[j] - sortie_obtenue[j]) * derniere.neurones[j].activation_prime(derniere.neurones[j].agregation(derniere.entree));
+				erreur[j] = (sorties_app.get(ex)[j] - sortie_obtenue[j]) * derniere.neurones[j].activation_prime(derniere.neurones[j].agregation(derniere.entree));
 
 				for(int i = 0; i < derniere.taille_entree; i++) {
 					derniere.neurones[j].poids[i] += taux * erreur[j] * derniere.entree[i];
@@ -62,6 +74,13 @@ public class Reseau {
 			
 	}
 	
+	/**
+	 * Calcule l'erreur quadratique moyenne du réseau sur un set d'exemples
+	 * 
+	 * @param entrees	Liste des entrées des exemples
+	 * @param sorties	Liste des sorties des exemples 
+	 * @return	Erreur quadratique moyenne du réseau 
+	 */
 	public double validation(ArrayList<double[]> entrees, ArrayList<double[]> sorties) {
 		
 		Couche derniere = couches.get(couches.size() - 1);

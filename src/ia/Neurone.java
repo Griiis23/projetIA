@@ -14,20 +14,28 @@ public class Neurone {
 	}
 
 
+	/**
+	 * Fonction d'activation
+	 */
 	public double activation(double entree) {
 		return sigmoide(entree);
 	}
 
+	/**
+	 * Dérivée de la fonction d'activation
+	 */
 	public double activation_prime(double entree) {
 		return sigmoide_prime(entree);
 	}
 
+	/**
+	 * Fonction d'agrégation
+	 */
 	public double agregation(double entree[]) {
 		double somme = 0;
 
-		for (int i = 0; i < entree.length; i++) {
-			somme += poids[i] * entree[i];
-		}
+		// Somme pondérée des entrées
+		for (int i = 0; i < entree.length; i++) somme += poids[i] * entree[i];
 
 		return somme;
 	}
