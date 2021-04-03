@@ -10,7 +10,7 @@ public class Neurone {
 	public Neurone(int taille_entree) {
 		this.poids = new double[taille_entree];
 
-		for (int i = 0; i < taille_entree; i++) this.poids[i] = (2 * Math.random() - 1) * 0.1;
+		for (int i = 0; i < taille_entree; i++) this.poids[i] = (2 * Math.random() - 1) * 0.01;
 	}
 
 
@@ -31,8 +31,6 @@ public class Neurone {
 
 		return somme;
 	}
-
-
 
 	private double sigmoide(double x) {
 		return 1 / ( 1 + Math.pow ( Math.E, (-lambda*x) ));

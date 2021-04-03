@@ -1,6 +1,6 @@
 package ia;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Reseau {
 
@@ -32,21 +32,21 @@ public class Reseau {
 	}
 
 
-	public void apprentissage(double entrees[][], double sorties_attendues[][], double taux) {
+	public void apprentissage(ArrayList<double[]> entrees, ArrayList<double[]> sorties, double taux) {
 		
-		for (int ex = 0; ex < entrees.length; ex++) {
-
+		for (int count = 0; count < entrees.size(); count++) {
+			int ex = (int) (Math.random() * entrees.size());
 			// On calcule la sortie
-			double sortie_obtenue[] = prediction(entrees[ex]);
+			double sortie_obtenue[] = prediction(entrees.get(ex));
 
 			// On calcule l'erreur de la derniere couche
 			Couche derniere = couches.get(couches.size() - 1);
 			double erreur[] = new double[derniere.taille_neurones];
 
 			for (int j = 0; j < derniere.taille_neurones; j++ ) {
-				erreur[j] = (sorties_attendues[ex][j] - sortie_obtenue[j]) * derniere.neurones[j].activation_prime(derniere.neurones[j].agregation(derniere.entree));
+				erreur[j] = (sorties.get(ex)[j] - sortie_obtenue[j]) * derniere.neurones[j].activation_prime(derniere.neurones[j].agregation(derniere.entree));
 
-				for(int i = 0; i < taille_entree; i++) {
+				for(int i = 0; i < derniere.taille_entree; i++) {
 					derniere.neurones[j].poids[i] += taux * erreur[j] * derniere.entree[i];
 				}
 			}
@@ -58,42 +58,31 @@ public class Reseau {
 		}
 			
 	}
-
-
-	public static void main(String[] args) {
-		double entrees[][] = {
-			{1,1},
-			{0,1},
-			{1,0},
-			{0,0}
-		};
-
-		double sorties[][] = {
-			{0},
-			{1},
-			{1},
-			{0}
-		};
-
-
-		Reseau r = new Reseau(2);
-
-		
-		r.addCouche(4);
-		r.addCouche(1);
-
-
-
-		
-		for(int i=0; i < 1000000; i++) r.apprentissage(entrees,sorties, 0.1);
-
 	
+	public double validation(ArrayList<double[]> entrees, ArrayList<double[]> sorties) {
+		
+		Couche derniere = couches.get(couches.size() - 1);
+		double erreur[] = new double[derniere.taille_neurones];
+		
+		// Pour chaque chaque exemple
+		for (int ex = 0; ex < entrees.size(); ex++) {
 
-		for (int i=0; i<entrees.length; i++) {
-			double result[] = r.prediction(entrees[i]);
-			System.out.println(result[0]);
+			// On calcule la sortie
+			double sortie_obtenue[] = prediction(entrees.get(ex));
+
+			// On calcule la moyenne des erreurs quadratique en sortie de chaque neurrone 
+			for (int j = 0; j < derniere.taille_neurones; j++ ) {
+				erreur[j] += Math.pow(sorties.get(ex)[j] - sortie_obtenue[j],2)/entrees.size();
+			}
 		}
+		
+		// On fait la moyenne des moyennes
+		double moyenne = 0;
+		for(int i = 0; i < derniere.taille_neurones; i++) {
+			moyenne += erreur[i]/derniere.taille_neurones;
+		}
+		
+		return moyenne;
 	}
-
 
 }
