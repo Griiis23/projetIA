@@ -6,10 +6,20 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.util.*;
 
+/**
+ * Classe chargée de la normalisation des données et de les faire apprendre au réseau
+ *
+ */
 public class IA {
 	
+	/**
+	 * Reseau de neurones
+	 */
 	private Reseau reseau;
 
+	/**
+	 * Constructeur. Initialise le réseau
+	 */
 	public IA () {
 		this.reseau = new Reseau(1024);
 		this.reseau.addCouche(64);
@@ -40,7 +50,7 @@ public class IA {
     				int blue = (pixel) & 0xff;
     				
     				// On calcule la moyenne des 3 sous pixels
-    				entree[i*w + j] = ((double)red/255 + (double)green/255 + (double)blue/255)/3;
+    				entree[i*w + j] = ((double)red + (double)green + (double)blue)/(3*255);
 				}
 			}
 			return entree;
@@ -83,7 +93,7 @@ public class IA {
 	}
 	
 	/**
-	 * Fonction d'apprentissage
+	 * Fonction d'apprentissage.
 	 * 
 	 * @param chemin	Chemin du dossier data
 	 * @param seuil		Seuil de validation
@@ -102,17 +112,7 @@ public class IA {
 		ArrayList<double[]> sorties_valid = new ArrayList<double[]>();
 		charger_donnees(chemin + "/Validation", entrees_valid, sorties_valid);
 		
-		// Faire apprendre les données
-		System.out.println("Début apprentissage");
-		double erreur;
-		do {
-			reseau.retropropagation(entrees_app, sorties_app, 0.01);
-			// Tester le réseau
-			erreur = reseau.validation(entrees_valid, sorties_valid);
-			System.out.println("Erreur quadratique moyenne : " + erreur);
-		} while(erreur > seuil);
-		
-		System.out.println("Fin apprentissage");
+		reseau.apprendre(entrees_app, sorties_app, entrees_valid, sorties_valid, seuil, taux);
 	}
 	
 	
@@ -136,6 +136,10 @@ public class IA {
 		}
 	}
 
+	/**
+	 * Main
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		IA ia = new IA();
 		Scanner sc = new Scanner(System.in);
@@ -146,7 +150,7 @@ public class IA {
 				System.out.println("=== MENU ===\n1. Faire apprendre\n2. Tester\n3. Quitter");
 				rep = sc.next().trim();
 				if (rep.equals("1")) {
-					System.out.println("Seuil ?");
+					System.out.println("Erreur quadratique seuil ?");
 					double seuil = sc.nextDouble();
 					System.out.println("Chemin du dossier de données ?");
 					String chemin = sc.next();

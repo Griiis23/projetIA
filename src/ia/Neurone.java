@@ -1,15 +1,30 @@
 package ia;
 
+/**
+ * Classe représentant un neurone d'une couche utilisant la fonction sigmoide
+ *
+ */
 public class Neurone {
 
+	/**
+	 * Constante lambda de la fonction sigmoide
+	 */
 	private static final int lambda = 2;
 
+	/**
+	 * Tableau des poids pour chaque entrée du neurone
+	 */
 	double poids[];
 
 
+	/**
+	 * Constructeur
+	 * @param taille_entree Nombre d'entrees du neurone
+	 */
 	public Neurone(int taille_entree) {
 		this.poids = new double[taille_entree];
 
+		//On initialise des poids entre -0.1 et 0.1
 		for (int i = 0; i < taille_entree; i++) this.poids[i] = (2 * Math.random() - 1) * 0.01;
 	}
 

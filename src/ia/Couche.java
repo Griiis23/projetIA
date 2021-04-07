@@ -1,15 +1,43 @@
 package ia;
 
+/**
+ * Classe représentant une couche du réseau
+ *
+ */
 class Couche {
 
+	/**
+	 * On garde une référence de la dernière entrée de la couche pour la rétropropagation
+	 */
 	double entree[];
+	
+	/**
+	 * On garde une référence de la dernière sortie de la couche le réseau pour la rétropropagation
+	 */
 	double sortie[];
 
+	/**
+	 * Nombre d'entrées de la couche
+	 */
 	int taille_entree;
+	
+	
+	/**
+	 * Nombre de neurones / de sorties de la couche
+	 */
 	int taille_neurones;
 
+	/**
+	 * Tableau de neurone de la couche
+	 */
 	Neurone neurones[];
 
+	
+	/**
+	 * Constructeur
+	 * @param taille_entree Nombre d'entrées de la couche
+	 * @param taille_neurones  Nombre de neurones / de sorties de la couche
+	 */
 	public Couche(int taille_entree, int taille_neurones) {
 		this.taille_entree = taille_entree;
 		this.taille_neurones = taille_neurones;
